@@ -57,4 +57,33 @@ class RegisterController extends BaseController
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         } 
     }
+
+    public function result(Request $request)
+    {
+        echo('hello');die;
+        // Invalidate the user's session
+        Auth::logout();
+
+        // Invalidate the session token if you are using sessions
+        $request->session()->invalidate();
+
+        // Regenerate the CSRF token to avoid session fixation
+        $request->session()->regenerateToken();
+
+        // Redirect to the login page or wherever you want
+        return redirect('/login')->with('success', 'You have been logged out successfully.');
+    }
+
+    public function logout(Request $request)
+    {
+        // Revoke the token that was used to authenticate the current request
+        // $request->user()->currentAccessToken()->delete();
+        // Revoke all tokens for the user
+        $request->user()->tokens()->delete();
+
+        // Return a successful response
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
+    }
 }

@@ -7,9 +7,11 @@ use App\Http\Controllers\API\RegisterController;
 
 
 Route::controller(RegisterController::class)->group(function() {
-    Route::post('register/', 'register');
-    Route::post('login/', 'login');
+    Route::post('register', 'register');
+    Route::post('login', 'login');
 });
+
+Route::middleware('auth:sanctum')->post('logout', [RegisterController::class, 'logout']);
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('products', ProductController::class);
